@@ -1,14 +1,14 @@
 CREATE TABLE bivouacs(
     bivouac_id serial NOT NULL PRIMARY KEY,
+    host_id integer NOT NULL,
+    name varchar(80) NOT NULL,
     price numeric(18, 16) NOT NULL,
     rental_type varchar(30),
     field_type varchar(80),
     area numeric(18, 16),
     description varchar(200) NOT NULL,
     is_pmr boolean NOT NULL,
-    privacy varchar(7) NOT NULL,
-    is_host boolean default false,
-    is_admin boolean default false
+    privacy varchar(7) NOT NULL
 );
 
 CREATE TABLE equipments(
@@ -45,7 +45,7 @@ CREATE TABLE user_locations
     location_id integer NOT NULL REFERENCES locations (location_id)
 );
 
-INSERT INTO bivouacs(price,rental_type,field_type,area,description,is_pmr,privacy) VALUES(34,'nothing','forest',56,'Trop bien', false, 'public');
+INSERT INTO bivouacs(host_id,name,price,rental_type,field_type,area,description,is_pmr,privacy) VALUES(1,'Le meilleur Bivouac',34,'nothing','forest',56,'Trop bien', false, 'public');
 INSERT INTO equipments(label,icon) VALUES('shower','shower');
-INSERT INTO users(first_name,last_name,email,phone_number,password) VALUES('Tom','Robinson','tom.rob@yopmail.com','+15103754657','123456');
-INSERT INTO locations(latitude,longitude,location_date) VALUES(43.63746472422702,3.8409670228559136,now());
+--INSERT INTO users(first_name,last_name,email,phone_number,password) VALUES('Tom','Robinson','tom.rob@yopmail.com','+15103754657','123456');
+--INSERT INTO locations(latitude,longitude,location_date) VALUES(43.63746472422702,3.8409670228559136,now());

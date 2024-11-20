@@ -31,6 +31,11 @@ public class BivouacController {
         return bivouacRepository.getById(id);
     }
 
+    /*@GetMapping("/host/{host_id}")
+    public List<Bivouac> getByHostId(@PathVariable Long host_id) {
+        return bivouacRepository.findByHost_id(host_id);
+    }*/
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Bivouac create(@RequestBody final Bivouac bivouac) {
@@ -50,6 +55,7 @@ public class BivouacController {
         // les champs ont ete passes
         // Sinon , retourner une erreur 400 (Bad Payload )
         Bivouac existingBivouac = bivouacRepository.getById(id);
+               // .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bivouac with ID " + id + " not found"));
         BeanUtils.copyProperties(bivouac,existingBivouac ,"bivouac_id");
         return bivouacRepository.saveAndFlush(existingBivouac);
     }
