@@ -14,7 +14,8 @@ public class Bivouac {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long bivouac_id;
-    private long host_id;
+    @Column(name = "host_id")
+    private long hostId;
     private String name;
     private float price;
     private String rental_type;
@@ -32,8 +33,8 @@ public class Bivouac {
         return bivouac_id;
     }
 
-    public long getHost_id() {
-        return host_id;
+    public long getHostId() {
+        return hostId;
     }
 
     public String getName() {
@@ -76,8 +77,8 @@ public class Bivouac {
         this.bivouac_id = bivouac_id;
     }
 
-    public void setHost_id(long host_id) {
-        this.host_id = host_id;
+    public void setHostId(long host_id) {
+        this.hostId = host_id;
     }
 
     public void setName(String name) {
