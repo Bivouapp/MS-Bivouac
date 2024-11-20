@@ -5,6 +5,7 @@ import com.example.demo.repositories.EquipmentRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,40 +19,39 @@ public class EquipmentController {
     private EquipmentRepository equipmentRepository;
 
     @GetMapping
-    public List<Equipment> list () {
-        return equipmentRepository.findAll();
+    public ResponseEntity<List<Equipment>> list () {
+        List<Equipment> equipements = equipmentRepository.findAll();
+        return ResponseEntity.ok(equipements);
     }
 
-    @GetMapping
-    @RequestMapping("{id}")
-    public Equipment get(@PathVariable Long id) {
-        if (equipmentRepository.findById(id).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipment with ID "+id+" not found");
-        }
-        return equipmentRepository.getById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Equipment> get(@PathVariable Long id) {
+        Equipment equipment = equipmentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipment with ID " + id + " not found"));
+        return ResponseEntity.ok(equipment);  // Retourne une réponse avec code 200 OK
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Equipment create(@RequestBody final Equipment equipment) {
-        return equipmentRepository.saveAndFlush(equipment);
+    public ResponseEntity<Equipment> create(@RequestBody final Equipment equipment) {
+        Equipment savedEquipment =  equipmentRepository.saveAndFlush(equipment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedEquipment);  // Retourne une réponse avec code 201 Created
     }
 
-    @RequestMapping(value = "{id}",method = RequestMethod.DELETE)
-    public void delete(@PathVariable Long id) {
-        // Toujours verifier s’il faut
-        // les enregistrements enfants
-        equipmentRepository.deleteById(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        Equipment equipment = equipmentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipment with ID " + id + " not found"));
+        equipmentRepository.delete(equipment);
+        return ResponseEntity.noContent().build();  // Retourne une réponse avec code 204 No Content
     }
 
-    @RequestMapping(value="{id}",method = RequestMethod.PUT)
-    public Equipment update(@PathVariable Long id, @RequestBody Equipment equipment) {
-        // TO DO: Ajouter ici une validation si tous
-        // les champs ont ete passes
-        // Sinon , retourner une erreur 400 (Bad Payload )
-        Equipment existingEquipment = equipmentRepository.getById(id);
-        BeanUtils.copyProperties(equipment,existingEquipment ,"equipment_id");
-        return equipmentRepository.saveAndFlush(existingEquipment);
+    @PutMapping("/{id}")
+    public ResponseEntity<Equipment> update(@PathVariable Long id, @RequestBody Equipment equipment) {
+        Equipment existingEquipment = equipmentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipment with ID " + id + " not found"));
+        BeanUtils.copyProperties(equipment, existingEquipment, "equipement_id");
+        Equipment updatedEquipment = equipmentRepository.saveAndFlush(existingEquipment);
+        return ResponseEntity.ok(updatedEquipment);  // Retourne une réponse avec code 200 OK
     }
 
 }
