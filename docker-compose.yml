@@ -10,7 +10,9 @@ services:
     depends_on:
       - db
     environment:
-      - .env
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bivouac_manager_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
     volumes:
       - applogs:/app/logs
 
@@ -19,7 +21,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - .env
+      - POSTGRES_DB: bivouac_manager_db
+      - POSTGRES_USER: postgres
+      - POSTGRES_PASSWORD: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
