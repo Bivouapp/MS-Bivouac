@@ -18,11 +18,14 @@ public class Bivouac {
     private long hostId;
     private String name;
     private float price;
-    private String rental_type;
-    private String field_type;
+    @Column(name = "rental_type")
+    private String rentalType;
+    @Column(name = "field_type")
+    private String fieldType;
     private float area;
     private String description;
-    private boolean is_pmr;
+    @Column(name = "is_pmr")
+    private boolean isPmr;
     private String privacy;
 
     @ManyToMany
@@ -46,11 +49,11 @@ public class Bivouac {
     }
 
     public String getRental_type() {
-        return rental_type;
+        return rentalType;
     }
 
     public String getField_type() {
-        return field_type;
+        return fieldType;
     }
 
     public float getArea() {
@@ -62,7 +65,7 @@ public class Bivouac {
     }
 
     public boolean isIs_pmr() {
-        return is_pmr;
+        return isPmr;
     }
 
     public String getPrivacy() {
@@ -90,11 +93,11 @@ public class Bivouac {
     }
 
     public void setRental_type(String rentalType) {
-        this.rental_type = rentalType;
+        this.rentalType = rentalType;
     }
 
     public void setField_type(String fieldType) {
-        this.field_type = fieldType;
+        this.fieldType = fieldType;
     }
 
     public void setArea(float area) {
@@ -106,7 +109,7 @@ public class Bivouac {
     }
 
     public void setIs_pmr(boolean is_pmr) {
-        this.is_pmr = is_pmr;
+        this.isPmr = is_pmr;
     }
 
     public void setPrivacy(String privacy) {
