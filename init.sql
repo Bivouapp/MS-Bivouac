@@ -2,10 +2,10 @@ CREATE TABLE bivouacs(
     bivouac_id serial NOT NULL PRIMARY KEY,
     host_id integer NOT NULL,
     name varchar(80) NOT NULL,
-    price numeric(18, 16) NOT NULL,
+    price numeric NOT NULL,
     rental_type varchar(30),
     field_type varchar(80),
-    area numeric(18, 16),
+    area numeric,
     description varchar(200) NOT NULL,
     is_pmr boolean NOT NULL,
     privacy varchar(7) NOT NULL
