@@ -1,7 +1,12 @@
 package com.example.demo.controllers;
 
 import com.example.demo.models.Bivouac;
+import com.example.demo.models.BivouacEquipment;
+import com.example.demo.models.BivouacEquipmentId;
+import com.example.demo.models.Equipment;
 import com.example.demo.repositories.BivouacRepository;
+import com.example.demo.repositories.EquipmentRepository;
+import com.example.demo.repositories.BivouacEquipmentRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +22,12 @@ public class BivouacController {
 
     @Autowired
     private BivouacRepository bivouacRepository;
+
+    @Autowired
+    private EquipmentRepository equipmentRepository;
+
+    @Autowired
+    private BivouacEquipmentRepository bivouacEquipmentRepository;
 
     @GetMapping
     public ResponseEntity<List<Bivouac>> list () {
@@ -51,7 +62,23 @@ public class BivouacController {
 
     @PostMapping
     public ResponseEntity<Bivouac> create(@RequestBody final Bivouac bivouac) {
+        // Sauvegarder le bivouac sans lier immédiatement les équipements
         Bivouac savedBivouac = bivouacRepository.saveAndFlush(bivouac);
+        // Récupérer les équipements à partir des IDs
+        if (bivouac.getEquipmentIds() != null && !bivouac.getEquipmentIds().isEmpty()) {
+            for (Long equipmentId : bivouac.getEquipmentIds()) {
+                Equipment equipment = equipmentRepository.findById(equipmentId)
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid equipment ID: " + equipmentId));
+
+                // Créer la relation dans la table de croisement avec clé composite
+                BivouacEquipment bivouacEquipment = new BivouacEquipment();
+                BivouacEquipmentId bivouacEquipmentId = new BivouacEquipmentId(savedBivouac.getBivouacId(), equipment.getEquipmentId());
+                bivouacEquipment.setBivouac(savedBivouac);
+                bivouacEquipment.setEquipment(equipment);
+
+                bivouacEquipmentRepository.save(bivouacEquipment);
+            }
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBivouac);  // Retourne une réponse avec code 201 Created
     }
 

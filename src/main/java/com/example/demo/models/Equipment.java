@@ -13,16 +13,17 @@ public class Equipment {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long equipment_id;
+    @Column(name = "equipment_id")
+    private long equipmentId;
 
     private String label;
     private String icon;
 
-    @ManyToMany(mappedBy = "equipments")  // mappedBy indique que la relation est déjà définie dans Bivouac
-    private Set<Bivouac> bivouacs = new HashSet<>();
+    @OneToMany(mappedBy = "equipment")
+    private Set<BivouacEquipment> bivouacEquipments = new HashSet<>();
 
-    public long getEquipment_id() {
-        return equipment_id;
+    public long getEquipmentId() {
+        return equipmentId;
     }
 
     public String getLabel() {
@@ -33,12 +34,8 @@ public class Equipment {
         return icon;
     }
 
-    public Set<Bivouac> getBivouacs() {
-        return bivouacs;
-    }
-
-    public void setEquipment_id(long equipment_id) {
-        this.equipment_id = equipment_id;
+    public void setEquipmentId(long equipmentId) {
+        this.equipmentId = equipmentId;
     }
 
     public void setLabel(String label) {
@@ -47,10 +44,6 @@ public class Equipment {
 
     public void setIcon(String icon) {
         this.icon = icon;
-    }
-
-    public void setBivouacs(Set<Bivouac> bivouacs) {
-        this.bivouacs = bivouacs;
     }
 
 }

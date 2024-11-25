@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 @Entity(name="bivouacs")
@@ -13,7 +14,8 @@ public class Bivouac {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long bivouac_id;
+    @Column(name = "bivouac_id")
+    private long bivouacId;
     @Column(name = "host_id")
     private long hostId;
     private String name;
@@ -28,12 +30,22 @@ public class Bivouac {
     private boolean isPmr;
     private String privacy;
 
-    @ManyToMany
-    @JoinTable(name = "bivouac_equipments",joinColumns = @JoinColumn(name = "bivouac_id"),inverseJoinColumns = @JoinColumn(name = "equipment_id"))
-    private Set<Equipment> equipments = new HashSet<>();
+    @Transient
+    private List<Long> equipmentIds;
 
-    public long getBivouac_id() {
-        return bivouac_id;
+    public List<Long> getEquipmentIds() {
+        return equipmentIds;
+    }
+
+    public void setEquipmentIds(List<Long> equipmentIds) {
+        this.equipmentIds = equipmentIds;
+    }
+
+    @OneToMany(mappedBy = "bivouac")
+    private Set<BivouacEquipment> bivouacEquipments = new HashSet<>();
+
+    public long getBivouacId() {
+        return bivouacId;
     }
 
     public long getHostId() {
@@ -72,12 +84,8 @@ public class Bivouac {
         return privacy;
     }
 
-    public Set<Equipment> getEquipments() {
-        return equipments;
-    }
-
-    public void setBivouac_id(long bivouac_id) {
-        this.bivouac_id = bivouac_id;
+    public void setBivouacId(long bivouacId) {
+        this.bivouacId = bivouacId;
     }
 
     public void setHostId(long host_id) {
@@ -114,10 +122,6 @@ public class Bivouac {
 
     public void setPrivacy(String privacy) {
         this.privacy = privacy;
-    }
-
-    public void setEquipments(Set<Equipment> equipments) {
-        this.equipments = equipments;
     }
 
 }
