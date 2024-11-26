@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dtos.BivouacEquipmentDTO;
 import com.example.demo.models.Bivouac;
 import com.example.demo.models.BivouacEquipment;
 import com.example.demo.models.Equipment;
@@ -20,6 +21,15 @@ public class BivouacEquipmentController {
 
     @Autowired
     private BivouacEquipmentRepository bivouacEquipmentRepository;
+
+    @GetMapping
+    public ResponseEntity<List<BivouacEquipmentDTO>> list() {
+        List<BivouacEquipment> bivouacEquipments = bivouacEquipmentRepository.findAll();
+        List<BivouacEquipmentDTO> dtoList = bivouacEquipments.stream()
+                .map(be -> new BivouacEquipmentDTO(be.getBivouac().getBivouacId(), be.getEquipment().getEquipmentId()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtoList);
+    }
 
     @GetMapping("/bivouac/{bivouacId}")
     public ResponseEntity<List<Equipment>> getByBivouacId(@PathVariable Long bivouacId) {
