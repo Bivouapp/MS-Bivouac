@@ -1,6 +1,7 @@
 CREATE TABLE bivouacs(
     bivouac_id serial NOT NULL PRIMARY KEY,
     host_id integer NOT NULL,
+    address_id integer NOT NULL,
     name varchar(80) NOT NULL,
     price numeric NOT NULL,
     rental_type varchar(30),
