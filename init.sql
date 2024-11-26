@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS bivouac_equipments;
+DROP TABLE IF EXISTS bivouacs;
+DROP TABLE IF EXISTS equipments;
+
 CREATE TABLE bivouacs(
     bivouac_id serial NOT NULL PRIMARY KEY,
     host_id integer NOT NULL,
