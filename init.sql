@@ -24,7 +24,7 @@ CREATE TABLE bivouac_equipments
     equipment_id integer NOT NULL REFERENCES equipments (equipment_id)
 );
 
-INSERT INTO bivouacs(host_id,address_id,name,price,rental_type,field_type,area,description,is_pmr,privacy) VALUES(1,3,'Le meilleur Bivouac',34,'nothing','forest',56,'Trop bien', false, 'public');
+INSERT INTO bivouacs(host_id,name,price,rental_type,field_type,area,description,is_pmr,privacy) VALUES(1,'Le meilleur Bivouac',34,'nothing','forest',56,'Trop bien', false, 'public');
 INSERT INTO equipments(label,icon) VALUES('water','tint');
 INSERT INTO equipments(label,icon) VALUES('electricity','bolt');
 INSERT INTO equipments(label,icon) VALUES('shelter','shower');
