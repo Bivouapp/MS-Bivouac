@@ -18,8 +18,6 @@ public class Bivouac {
     private long bivouacId;
     @Column(name = "host_id")
     private long hostId;
-    @Column(name = "address_id")
-    private long addressId;
     private String name;
     private float price;
     @Column(name = "rental_type")
@@ -52,10 +50,6 @@ public class Bivouac {
 
     public long getHostId() {
         return hostId;
-    }
-
-    public long getAddressId() {
-        return addressId;
     }
 
     public String getName() {
@@ -96,10 +90,6 @@ public class Bivouac {
 
     public void setHostId(long host_id) {
         this.hostId = host_id;
-    }
-
-    public void setAddressId(long address_id) {
-        this.addressId = address_id;
     }
 
     public void setName(String name) {
