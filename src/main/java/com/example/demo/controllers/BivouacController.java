@@ -1,12 +1,10 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.Bivouac;
-import com.example.demo.models.BivouacEquipment;
-import com.example.demo.models.BivouacEquipmentId;
-import com.example.demo.models.Equipment;
+import com.example.demo.models.*;
 import com.example.demo.repositories.BivouacRepository;
 import com.example.demo.repositories.EquipmentRepository;
 import com.example.demo.repositories.BivouacEquipmentRepository;
+import com.example.demo.repositories.PhotoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/bivouacs")
@@ -28,6 +28,9 @@ public class BivouacController {
 
     @Autowired
     private BivouacEquipmentRepository bivouacEquipmentRepository;
+
+    @Autowired
+    private PhotoRepository photoRepository;
 
     @GetMapping
     public ResponseEntity<List<Bivouac>> list () {
@@ -97,6 +100,28 @@ public class BivouacController {
         BeanUtils.copyProperties(bivouac, existingBivouac, "bivouac_id");
         Bivouac updatedBivouac = bivouacRepository.saveAndFlush(existingBivouac);
         return ResponseEntity.ok(updatedBivouac);  // Retourne une réponse avec code 200 OK
+    }
+
+    // Ajouter des photos à un bivouac
+    @PutMapping("/{bivouacId}/photos")
+    public ResponseEntity<Void> addPhotosToBivouac(@PathVariable long bivouacId, @RequestBody List<Long> photoIds) {
+        Bivouac bivouac = bivouacRepository.findById(bivouacId).orElse(null);
+        if (bivouac == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Set<Photo> photos = new HashSet<>();
+        for (Long photoId : photoIds) {
+            Photo photo = photoRepository.findById(photoId).orElse(null);
+            if (photo != null) {
+                photos.add(photo);
+            }
+        }
+
+        bivouac.setPhotos(photos);
+        bivouacRepository.save(bivouac);
+
+        return ResponseEntity.ok().build();
     }
 
 }

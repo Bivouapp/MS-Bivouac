@@ -35,12 +35,28 @@ public class Bivouac {
     @Transient
     private List<Long> equipmentIds;
 
+    @ManyToMany
+    @JoinTable(
+            name = "bivouac_photos",
+            joinColumns = @JoinColumn(name = "bivouac_id"),
+            inverseJoinColumns = @JoinColumn(name = "photo_id")
+    )
+    private Set<Photo> photos = new HashSet<>();
+
     public List<Long> getEquipmentIds() {
         return equipmentIds;
     }
 
     public void setEquipmentIds(List<Long> equipmentIds) {
         this.equipmentIds = equipmentIds;
+    }
+
+    public Set<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(Set<Photo> photos) {
+        this.photos = photos;
     }
 
     @OneToMany(mappedBy = "bivouac")

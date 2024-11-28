@@ -1,4 +1,6 @@
 DROP TABLE IF EXISTS bivouac_equipments;
+DROP TABLE IF EXISTS bivouac_photos;
+DROP TABLE IF EXISTS photos;
 DROP TABLE IF EXISTS bivouacs;
 DROP TABLE IF EXISTS equipments;
 
@@ -25,7 +27,21 @@ CREATE TABLE equipments(
 CREATE TABLE bivouac_equipments
 (
     bivouac_id integer NOT NULL REFERENCES bivouacs (bivouac_id),
-    equipment_id integer NOT NULL REFERENCES equipments (equipment_id)
+    equipment_id integer NOT NULL REFERENCES equipments (equipment_id),
+    PRIMARY KEY (bivouac_id, equipment_id)
+);
+
+CREATE TABLE photos(
+    photo_id serial NOT NULL PRIMARY KEY,
+    file_name varchar(255) NOT NULL,  -- Nom du fichier
+    file_path varchar(255) NOT NULL,  -- Chemin du fichier
+    file_type varchar(50)            -- Type du fichier (image/jpeg, etc.)
+);
+
+CREATE TABLE bivouac_photos(
+    bivouac_id integer NOT NULL REFERENCES bivouacs (bivouac_id),
+    photo_id integer NOT NULL REFERENCES photos (photo_id),
+    PRIMARY KEY (bivouac_id, photo_id)
 );
 
 INSERT INTO bivouacs(host_id,address_id,name,price,rental_type,field_type,area,description,is_pmr,privacy) VALUES(1,3,'Le meilleur Bivouac',34,'nothing','forest',56,'Trop bien', false, 'public');
